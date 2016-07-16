@@ -1,7 +1,7 @@
 #include "elves.h"
 #include "potion.h"
 
-Elves::Elves(int row, int col, int chamber): Player(row,col,chamber,'@',140,30,10,0) {}
+Elves::Elves(std::shared_ptr<Cell> cell): Player(cell,'@',140,30,10,0) {}
 
 float Elves::getWealth(){
 	return (float) wealth;
