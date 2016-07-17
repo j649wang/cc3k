@@ -3,7 +3,7 @@
 #include "enemy.h"
 
 class Merchant: public Enemy{
-	bool hostile;
+	static bool hostile;
   public:
 	Merchant(std::shared_ptr<Cell> cell);
 	bool isHostile();

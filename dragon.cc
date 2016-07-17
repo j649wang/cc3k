@@ -5,10 +5,10 @@ using namespace std;
 
 class DragonHoard;
 
-Dragon::Dragon(shared_ptr<Cell> cell):Enemy(cell,'D',150,20,20,false){}
+Dragon::Dragon(shared_ptr<Cell> cell):Enemy(cell,'D',150,20,20,false,6),hostile{false}{}
 
-void Dragon::notify(DragonHoard &dh){
-	cout << "Notifed by " << dh.getType() << endl;
+void Dragon::setHostile(){
+	hostile = true;
 }
 
 void Dragon::move(){return;}

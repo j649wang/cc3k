@@ -4,6 +4,7 @@
 
 class Normal: public Gold{
   public:
+	void notifyDragon();
 	Normal(std::shared_ptr<Cell> cell);
 };
 

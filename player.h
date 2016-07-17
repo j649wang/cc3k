@@ -2,24 +2,31 @@
 #define _PLAYER_H_
 #include "character.h"
 #include "gold.h"
-
+#include <memory>
+#include <map>
+#include <string>
 
 class Potion;
+class Enemy;
 
 class Player: public Character{
-	int wealth;
+	bool attacked;
   protected:
-	virtual float getWealth()=0;
+	int gold;
+	virtual int getGold()=0;
 	virtual const int maxHP()const=0;
 	virtual const int maxATK()const=0;
 	virtual const int maxDEF()const=0;
   public:
+	std::map<std::string, int> potions;
+	virtual bool haveAttacted();
 	virtual void setAtkDef();
-	virtual void drinkPotion(Potion &p);
-	virtual void pickGold(Gold &g);
-	
+	virtual void drinkPotion(std::shared_ptr<Potion> p);
+	virtual int pickGold(std::shared_ptr<Gold> g);
+	virtual int attack(std::shared_ptr<Enemy> e);	
 	virtual void move(std::shared_ptr<Cell> cell);
-	Player(std::shared_ptr<Cell> cell,char symbol, int HP,int ATK,int DEF, int wealth);
+	Player(std::shared_ptr<Cell> cell,char symbol, int HP,int ATK,int DEF);
+	void reset();
 	~Player();
 };
 

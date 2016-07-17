@@ -5,12 +5,12 @@
 class Elves: public Player{
   public:
 	Elves(std::shared_ptr<Cell> cell);
-	void getWealth()const override;
+	int getGold() override;
 	const int maxHP()const override;
 	const int maxATK()const override;
 	const int maxDEF()const override;
 
-	void drinkPotion(Potion &p)override;
+	void drinkPotion(std::shared_ptr<Potion> p)override;
 
 };
 #endif

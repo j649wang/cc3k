@@ -5,10 +5,11 @@
 class DragonHoard;
 
 class Dragon: public Enemy{
+	bool hostile;
   public:
 	Dragon(std::shared_ptr<Cell> cell);
-	void notify(DragonHoard &dh);
 	void move()override;
+	void setHostile();
 };
 
 #endif

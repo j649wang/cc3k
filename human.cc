@@ -1,11 +1,9 @@
 #include "human.h"
 
-
-
 Human::Human(std::shared_ptr<Cell> cell): Player(cell,'@',140,20,20) {}
 
-float Human::getWealth()const{
-	return (float) wealth;
+int Human::getGold(){
+	return gold; 
 }
 
 const int Human::maxHP() const{return 140;}

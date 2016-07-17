@@ -5,7 +5,7 @@
 class Human: public Player{
   public:
 	Human(std::shared_ptr<Cell> cell);
-	float getWealth()const override;
+	int getGold() override;
 	const int maxHP()const override;
 	const int maxATK()const override;
 	const int maxDEF()const override;

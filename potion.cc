@@ -1,14 +1,15 @@
 #include "potion.h"
 #include "player.h"
 
+
 using namespace std;
 
 class player;
 
 Potion::Potion(shared_ptr<Cell> cell, char symbol, string type,int HPeffect,int ATKeffect,int DEFeffect):Component(cell,symbol), type{type},HPeffect{HPeffect},ATKeffect{ATKeffect},DEFeffect{DEFeffect} {}
 
-void Potion::beDrunk(Player &p){
-	p.drinkPotion(*this);
+void Potion::beDrunk(shared_ptr<Player> p){
+	p->drinkPotion(shared_ptr<Potion>(this));
 }
 
 string Potion::getType()const {return type;}

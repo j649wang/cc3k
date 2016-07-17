@@ -9,6 +9,7 @@ class DragonHoard: public Gold{
 	std::unique_ptr<Dragon> guard;
   public:
 	DragonHoard(std::shared_ptr<Cell> cell, std::unique_ptr<Dragon> guard);
+	void notifyDragon();
 };
 
 #endif

@@ -1,6 +1,8 @@
 #include "merchant.h"
 
-Merchant::Merchant(std::shared_ptr<Cell> cell):Enemy(cell,'M',30,70,5,false) {}
+static bool Merchant::hostile = false;
+
+Merchant::Merchant(std::shared_ptr<Cell> cell):Enemy(cell,'M',30,70,5,true,4) {}
 
 bool Merchant::isHostile() {
 	if (getHP() < 30) {
