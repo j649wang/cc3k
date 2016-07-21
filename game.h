@@ -32,7 +32,7 @@ class Game{
     std::string filename;
     
 public:
-    Game(const std::string file = "map.txt");
+    Game(const std::string file);
     ~Game();
     
     bool quitGame();

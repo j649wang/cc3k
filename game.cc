@@ -38,10 +38,11 @@ Game::Game(const std::string inputFile):
 display{make_shared<Display>()},pc{make_shared<Human>()},
 quitprogram{false},filename{inputFile},floor{nullptr},
 MerchantHostile{false}, quitgame{false}{
-    if(inputFile == "default Map.txt"){
+    if(filename == "map.txt"){
         randomgeneration = true;
     }
 };
+
 bool Game::quitGame(){ return quitgame; }
 
 bool Game::quitProgram() {return quitprogram;}
