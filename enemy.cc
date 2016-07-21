@@ -1,38 +1,45 @@
 #include "enemy.h"
 #include "player.h"
-#include <stdlib.h>
+#include "cell.h"
 #include <cstdlib>
 #include <algorithm>
 
 using namespace std;
 
-Enemy::Enemy(shared_ptr<Cell> cell, char symbol, int HP, int ATK, int DEF, bool moveable,int gold):
-		Character(cell,symbol,HP,ATK,DEF),moveable{moveable}, gold{gold},hasmoved{false} {}
+Enemy::Enemy(int HP,int ATK,int DEF, char symbol, int gold, bool moveable, bool isHostile):
+Character(HP,ATK,DEF,symbol,gold),moveable{moveable},ishostile{isHostile} {}
 
-bool Enemy::moved(){return hasmoved;}
+Enemy::~Enemy(){};
 
-void Enemy::move() {
-	shared_ptr<Cell> target = getCell()->findwalkable();
-	if (target) {
-		getCell()->setObject(nullptr);
-		setCell(target);
-		hasmoved = true;
-	}
+void Enemy::setHostile(bool i){
+    ishostile = i;
 }
 
-int Enemy::attack(shared_ptr<Player> p) {
-	int damage=0;
-	srand(time(NULL));
-	int r = rand()%2;
-	if(r==1){ 
-		damage = ceil(100.0/(100+p->getDEF()))* ATK;
-		p->setHP(max(0,p->getHP() - damage));
-	}
-	return damage;
+bool Enemy::isHostile() const{
+    return ishostile;
 }
 
-int Enemy::getGold()const{return gold;}
 
-void Enemy::reset(){hasmoved = false;}
+bool Enemy::canMove() const{ return moveable;}
 
-Enemy::~Enemy() {}
+
+bool Enemy::move(Cell *targetcell, Cell *curcell){
+    if(targetcell){
+        setCoords(*targetcell);
+        targetcell->setDisplayComponent(shared_from_this());
+        curcell->componentLeft();
+        return true;
+    }
+    return false;
+}
+
+int Enemy::attack(std::shared_ptr<Character> defender, Cell *targetcell) {
+    int r = rand()%2;
+        if(r == 1){
+            return Character::attack(defender, targetcell);
+        }else {
+            return 0;
+        }
+}
+
+bool Enemy::isEnemy() const{ return true;}

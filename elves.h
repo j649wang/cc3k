@@ -2,15 +2,10 @@
 #define _ELVES_H_
 #include "player.h"
 
+//override drinkPotion
 class Elves: public Player{
   public:
-	Elves(std::shared_ptr<Cell> cell);
-	int getGold() override;
-	const int maxHP()const override;
-	const int maxATK()const override;
-	const int maxDEF()const override;
-
-	void drinkPotion(std::shared_ptr<Potion> p)override;
-
+	Elves();
+	void drinkPotion(std::shared_ptr<Potion> p, Cell *targetcell) override;
 };
 #endif

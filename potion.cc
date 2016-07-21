@@ -6,18 +6,22 @@ using namespace std;
 
 class player;
 
-Potion::Potion(shared_ptr<Cell> cell, char symbol, string type,int HPeffect,int ATKeffect,int DEFeffect):Component(cell,symbol), type{type},HPeffect{HPeffect},ATKeffect{ATKeffect},DEFeffect{DEFeffect} {}
+Potion::Potion(string name,string feature,int HPeffect,int ATKeffect,int DEFeffect,char symbol):
+item(symbol), description{feature},name{name},HPeffect{HPeffect},ATKeffect{ATKeffect},DEFeffect{DEFeffect} {}
 
-void Potion::beDrunk(shared_ptr<Player> p){
-	p->drinkPotion(shared_ptr<Potion>(this));
+Potion::~Potion(){};
+
+string Potion::getName() const {
+    return name;
 }
 
-string Potion::getType()const {return type;}
+string Potion::describe() const {return description;}
 
-int Potion::getHPeffect()const {return HPeffect;}
+bool Potion::isPotion() const {return true;};
 
-int Potion::getATKeffect()const {return ATKeffect;}
+int Potion::getHPeffect() const {return HPeffect;}
 
-int Potion::getDEFeffect()const {return DEFeffect;}
+int Potion::getATKeffect() const {return ATKeffect;}
 
-Potion::~Potion() {}
+int Potion::getDEFeffect() const {return DEFeffect;}
+

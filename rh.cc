@@ -1,3 +1,11 @@
+//
+//  ba.cpp
+//  cc3k.cs246.Final
+//
+//  Created by Zoey on 16/7/17.
+//  Copyright © 2016年 Zoey. All rights reserved.
+//
+
 #include "rh.h"
 
-RH::RH(std::shared_ptr<Cell> cell):Potion(cell, 'P',"RH", 10,0,0) {}
+RH::RH():Potion("RG", "restore 10 HP", 10,0,0) {}

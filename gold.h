@@ -1,17 +1,20 @@
 #ifndef _GOLD_H_
 #define _GOLD_H_
-#include "component.h"
+#include "item.h"
 #include <string>
 
-class Gold: public Component{
+class Dragon;
+
+class Gold: public item{
 	int value;
-	std::string type;
-  protected:
-	virtual void notifyDragon()=0;
   public:
 	virtual int getValue()const;
-	virtual std::string getType()const;	
-	Gold(std::shared_ptr<Cell> cell, char symbol, int value, std::string type);
-	~Gold();
+    virtual void notifyDragon(Cell *Playernear);
+    virtual bool canPickUp() const;
+    virtual void setGuard(std::shared_ptr<Component> guard);
+	Gold(int value, char symbol = 'G');
+    bool isGold() const override;
+    virtual ~Gold() = 0;
+    virtual void addDragon(Cell *curpos);
 };
 #endif

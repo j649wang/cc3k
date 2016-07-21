@@ -2,9 +2,21 @@
 
 using namespace std;
 
-Gold::Gold(shared_ptr<Cell> cell, char symbol, int value, string type): Component(cell,symbol),value{value},type{type} {}
+Gold::Gold(int value, char symbol): item(symbol),value{value}{}
 
 int Gold::getValue()const {return value;}
-string Gold::getType()const {return type;}
 
-Gold::~Gold() {}
+void Gold::notifyDragon(Cell *player){}
+
+bool Gold::canPickUp() const {return true;}
+
+Gold::~Gold(){}
+
+void Gold::addDragon(Cell *curpos){}
+
+bool Gold::isGold() const{ return true;}
+
+void Gold::setGuard(shared_ptr<Component> guard){}
+
+
+

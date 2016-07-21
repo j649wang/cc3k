@@ -4,17 +4,21 @@
 
 class Player;
 
-class Enemy: public Character{
+class Enemy: public Character, public std::enable_shared_from_this<Enemy>{
 	bool moveable;
-	int gold;
-	bool hasmoved;
+    bool ishostile;
+    int gold;
   public:
-	Enemy(std::shared_ptr<Cell> cell, char symbol, int HP, int ATK, int DEF, bool moveable, int gold);
-	virtual bool moved();
-	virtual int attack(std::shared_ptr<Player> p);
-	virtual int getGold()const;
-	virtual void move();
-	void reset();
-	~Enemy();
+    bool canMove() const;
+    bool operator<(const std::shared_ptr<Enemy> &e);
+    Enemy(int HP,int ATK,int DEF, char symbol, int gold = 1,
+          bool moveable = true, bool isHostile = true);
+	int attack(std::shared_ptr<Character> defender, Cell *targetcell) override;
+	bool move(Cell *targetcell, Cell *curcell) override;
+    void setHostile(bool hostile) override;
+    virtual bool isHostile() const;
+    bool isEnemy() const override;
+    
+	virtual ~Enemy() = 0;
 };
 #endif

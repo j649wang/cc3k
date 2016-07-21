@@ -2,8 +2,8 @@
 #define _WEREWOLF_H_
 #include "enemy.h"
 
-class Werewolf: public Enemy{
+class Werewolf: public Enemy {
   public:
-	Werewolf(std::shared_ptr<Cell> cell);
+    Werewolf();
 };
 #endif

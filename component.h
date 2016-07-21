@@ -1,17 +1,29 @@
-#ifndef _COMPONENT_H_
+ #ifndef _COMPONENT_H_
 #define _COMPONENT_H_
 #include <memory>
-#include "cell.h"
 
+class Cell;
 class Component{
-	std::shared_ptr<Cell> cell; 
+    int row;
+    int col;
 	char symbol;
   public:
-	virtual std::shared_ptr<Cell>  getCell();
-	virtual char getSymbol() const;
-	virtual void setCell(std::shared_ptr<Cell> cp);
-
-	Component(std::shared_ptr<Cell> cell, char symbol);
-	~Component();
+    int getRow() const;
+    int getCol() const;
+    char getSymbol() const;
+    
+    void setRow(int i);
+    void setCol(int j);
+    void setCoords(const Cell &c);
+    Component(char symbol);
+    virtual bool isDead() const = 0;
+    virtual ~Component() = 0;
+    virtual bool isEnemy() const;
+    virtual bool isGold() const;
+    virtual bool isPotion() const;
+    virtual bool isPlayer() const;
+    virtual bool isMerchant() const;
+    virtual bool isDragon() const;
+    virtual void setHostile(bool hostile);
 };
 #endif

@@ -1,55 +1,62 @@
 #include "player.h"
 #include "gold.h"
+#include "cell.h"
 #include "potion.h"
 #include "enemy.h"
 #include <algorithm>
 
 using namespace std;
 
-Player::Player(shared_ptr<Cell> cell, char symbol, int HP, int ATK, int DEF):
-	 Character(cell,symbol,HP,ATK,DEF),gold{0},attacked{false} {}
+Player::Player(int HP,int ATK,int DEF,string name, char symbol):
+Character(HP, ATK, DEF, symbol), attacked{false}, name{name} {}
+
+Player::~Player(){};
 
 void Player::setAtkDef() {
-	ATK = maxATK();
-	DEF = maxDEF();
+    setATK(getOrigATK());
+    setDEF(getOrigDEF());
 };
 
-bool Player::haveAttacted(){return attacked;}
+bool Player::haveAttacked(){return attacked;}
+
+void Player::did_attack(){attacked = true;}
 
 void Player::reset(){ attacked = false;}
 
-void Player::drinkPotion(shared_ptr<Potion> p){
-	int newHP = HP + p->getHPeffect();
-	int newATK = ATK + p->getATKeffect();
-	int newDEF = DEF + p->getDEFeffect();
-	if (newHP >=0 && newHP <= maxHP()) HP = newHP;
-	else if (newHP < 0) HP=0;
-	else HP = maxHP();
-	if (newATK >=0) ATK = newATK;
-	else if (newATK < 0) ATK = 0;
-	else ATK = maxATK();
-	if (newDEF >=0) DEF = newDEF;
-	else if (newDEF < 0) DEF = 0;
-	else DEF = maxDEF();
-	++potions[p->getType()];
+bool Player::isPlayer() const{ return true;}
+
+string Player::getName(){ return name;}
+
+void Player::drinkPotion(shared_ptr<Potion> p, Cell *targetcell){
+	setHP(getHP() + p->getHPeffect());
+    setATK(getATK() + p->getATKeffect());
+    setDEF(getDEF() + p->getDEFeffect());
+    targetcell->componentLeft();
 }
 
-int Player::pickGold(shared_ptr<Gold> g){
-	gold = gold + g->getValue();
-	return g->getValue();
+int Player::pickGold(shared_ptr<Gold> g, Cell *curcell){
+    if(g->canPickUp()){
+        setGold(getGold() + g->getValue());
+        curcell->setOverlapComponent(nullptr); 
+        return g->getValue();
+    }
+    return 0;
 }
 
-int Player::attack(shared_ptr<Enemy> e){
-	int damage=0;
-	damage = ceil(100.0/(100+e->getDEF()))* ATK;
-	e->setHP(max(e->getHP() - damage,0));
-	attacked = true;
-	return damage;
+bool Player::move(Cell *targetcell, Cell *curcell){
+    if(targetcell->getDisplayComponent()->isGold()){
+            targetcell->setOverlapComponent (targetcell->getDisplayComponent());
+            // set gold as the overlap Component;
+    }
+    setCoords(*targetcell);
+    targetcell->setDisplayComponent(shared_from_this());
+    curcell->componentLeft();
+    return true;
 }
 
-void Player::move(shared_ptr<Cell> cell){
-	if (isDead()) return;
-	if (cell) setCell(cell);
+double Player::getScore() {
+    return getGold();
 }
-
-Player::~Player() {}	
+bool Player::hasReachedStair(Cell *targetcell){
+    return targetcell->getSymbol() == '\\';
+}

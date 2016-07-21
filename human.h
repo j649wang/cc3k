@@ -2,13 +2,11 @@
 #define _HUMAN_H_
 #include "player.h"
 
+//override getScore
 class Human: public Player{
   public:
-	Human(std::shared_ptr<Cell> cell);
-	int getGold() override;
-	const int maxHP()const override;
-	const int maxATK()const override;
-	const int maxDEF()const override;
+	Human();
+    double getScore() override;
 };
 
 #endif

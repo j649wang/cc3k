@@ -1,21 +1,35 @@
 #ifndef _CHARACTER_H_
 #define _CHARACTER_H_
-#include "component.h"
-#include <memory>
+#include "component.h" 
+#include "memory"
+
+class Cell;
 
 class Character: public Component{
-  protected:
 	int HP;
+    int maxHP;
 	int ATK;
+    int origATK;
 	int DEF;
-
+    int origDEF;
+    int gold;
   public:
-	virtual int setHP(const int n);	
-	Character(std::shared_ptr<Cell> cell, char symbol, int HP, int ATK, int DEF);
-	virtual int  getATK()const;
-	virtual int  getDEF()const;
-	virtual int  getHP()const;
-	virtual bool isDead();
-	~Character();
+    Character(int HP, int ATK, int DEF, char symbol, int gold = 0);
+    void setATK(int atk);
+    void setDEF(int def);
+    void setHP(int hp);
+    void setGold(int gold);
+    
+    int  getATK() const;
+    int  getDEF() const;
+    int  getHP() const;
+    int  getOrigATK() const;
+    int  getOrigDEF() const;
+
+    bool isDead() const override;
+    
+    virtual double getGold() const;
+    virtual bool move(Cell *targetcell, Cell *curcell) = 0;
+    virtual int attack(std::shared_ptr<Character> defender, Cell *targetcell);
 };
 #endif

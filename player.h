@@ -1,4 +1,4 @@
-#ifndef _PLAYER_H_
+ #ifndef _PLAYER_H_
 #define _PLAYER_H_
 #include "character.h"
 #include "gold.h"
@@ -9,25 +9,23 @@
 class Potion;
 class Enemy;
 
-class Player: public Character{
+class Player: public Character, public std::enable_shared_from_this<Player>{
 	bool attacked;
-  protected:
-	int gold;
-	virtual int getGold()=0;
-	virtual const int maxHP()const=0;
-	virtual const int maxATK()const=0;
-	virtual const int maxDEF()const=0;
+    std::string name;
   public:
-	std::map<std::string, int> potions;
-	virtual bool haveAttacted();
-	virtual void setAtkDef();
-	virtual void drinkPotion(std::shared_ptr<Potion> p);
-	virtual int pickGold(std::shared_ptr<Gold> g);
-	virtual int attack(std::shared_ptr<Enemy> e);	
-	virtual void move(std::shared_ptr<Cell> cell);
-	Player(std::shared_ptr<Cell> cell,char symbol, int HP,int ATK,int DEF);
-	void reset();
-	~Player();
+    Player(int HP,int ATK,int DEF, std::string name, char symbol = '@');
+	bool haveAttacked();
+    void setAtkDef();
+    void reset();
+    std::string getName();
+    void did_attack();
+    bool isPlayer() const override;
+    bool move(Cell *targetcell, Cell *curcell) override;
+    virtual void drinkPotion(std::shared_ptr<Potion> p, Cell *targetcell);
+    virtual int pickGold(std::shared_ptr<Gold> g, Cell *curcell);
+    virtual double getScore();
+    bool hasReachedStair(Cell *targetcell);
+    virtual ~Player() = 0;
 };
 
 #endif

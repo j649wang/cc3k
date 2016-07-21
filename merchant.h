@@ -3,9 +3,10 @@
 #include "enemy.h"
 
 class Merchant: public Enemy{
-	static bool hostile;
+    static bool MerchantHostile;
   public:
-	Merchant(std::shared_ptr<Cell> cell);
-	bool isHostile();
+    Merchant();
+	bool isHostile() const override;
+    bool isMerchant() const override;//override;
 };
 #endif

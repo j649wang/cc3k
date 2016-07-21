@@ -3,7 +3,7 @@
 #include "potion.h"
 
 class RH: public Potion{
-  public:
-	RH(std::shared_ptr<Cell> cell);
+public:
+	RH();
 };
 #endif
