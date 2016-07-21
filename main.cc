@@ -12,15 +12,15 @@
 using namespace std;
 
 int main(int argc, char **argv){
-    std::string floormap;
+    std::string floormap = NULL;
     bool restartGame;
     string cmd;
-    if(argc > 1){
+    if(argv[1]){
         floormap = argv[1];
     }
     
     do{
-        Game g;
+        Game g(floormap);
         g.chooserace(); //
         if(g.quitProgram()) return 0;
         g.start();
