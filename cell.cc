@@ -60,7 +60,7 @@ char Cell::getTileSymbol() const{ return symbol;};
 
 shared_ptr<Component> Cell::findDragon(){
     for(auto c: neighbors){
-        if(c && (c->getDisplayComponent()->isPotion())){
+        if(c && (c->getDisplayComponent()->isDragon())){
             return c->getDisplayComponent();
         }
     }
