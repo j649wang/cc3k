@@ -36,6 +36,10 @@ void Display::beginMessage(){
 void Display::EnterStairMessage(){
     action = action + ". PC must move to Stair from the right";
 }
+void Display::invalidCommane(){
+    cout << "invalid Command!" << endl;
+    action = "";
+}
 
 void Display::RaceinvalidCommand(){
     cout << "Invalid Command. Please enter one of 'h', 'e', 'o', 'd' or 'q'" << endl;
@@ -51,13 +55,16 @@ void Display::chooseRaceMessage(){
 }
 
 void Display::spawnMessage(){
-    action = "Player character has been spawned.";
+    action = "Player character has been spawned";
 }
-
+void Display::dragonHostileMessage(){
+    action = action + " and dragon is hostile now unless PC moves away from gold";
+}
 void Display::bottomMessage(int level, const shared_ptr<Player> &pc) const{
     stringstream gold;
     gold << pc->getGold();
     string firstline = "Race: "+ pc->getName()+ " Gold: " +gold.str();
+    cout << firstline << endl;
     for (int i = 0; i < Colnum - 10 - firstline.length(); ++i){
         cout << " ";
     }
@@ -65,7 +72,7 @@ void Display::bottomMessage(int level, const shared_ptr<Player> &pc) const{
     cout << "HP: " << pc->getHP() << endl;
     cout << "Atk: " << pc->getATK() << endl;
     cout << "Def: " << pc->getDEF() << endl;
-    cout << "Atction: " << action << "." << endl;
+    cout << "Action: " << action << "." << endl;
 }
 
 void Display::moveMessage(string dir){
@@ -103,7 +110,7 @@ void Display::drinkPotionMessage(const shared_ptr<Potion> &potion){
 
 void Display::pickGoldMessage(int amount){
     if(amount != 0){
-        action = action + " and picked a pile of Gold";
+        action = action + " and picked Gold";
     }else {
         action = action + " failed to pick Gold";
     }
@@ -118,7 +125,7 @@ void Display::PcAttackMessage(int damage, const shared_ptr<Enemy> &e){
         number << e->getGold();
         action = action + " and killed " + e->getSymbol();
         if(e->getSymbol() != 'D'){
-            action = action + " and found a pile of Gold";
+            action = action + " and found Gold";
         }else {
             action = action + " and PC may pick up the Dragon Hoard";
         }

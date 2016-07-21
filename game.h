@@ -41,10 +41,6 @@ public:
     bool isWin();
     bool isLost();
     
-    bool pcMove(std::string dir);
-    bool pcUsePotion(std::string dir);
-    bool pcAttack(std::string dir);
-    
     void chooserace();
     
     

@@ -41,6 +41,7 @@ public:
     void EnterStairMessage();
     void bottomMessage(int level, const std::shared_ptr<Player> &pc) const; //
     
+    void invalidCommane();
     void moveMessage(std::string dir);//
     void findPotion(std::map<std::string, int> potionList,
                     const std::vector<std::shared_ptr<Potion>> &potion); //
@@ -49,7 +50,7 @@ public:
     void winningMessage();//
     void lostMessage();//
     void scoreMessage(std::shared_ptr<Player> pc);//
-    
+    void dragonHostileMessage();
     void drinkPotionMessage(const std::shared_ptr<Potion> &potion); //
     void PcAttackMessage(int damage, const std::shared_ptr<Enemy> &e); //
     void EnemyAttackMessage(const std::vector<std::pair<char, int>> &enemylist);

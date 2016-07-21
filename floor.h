@@ -46,10 +46,14 @@ public:
     int generatePC();
     void generateStair(int i);
     
-    std::vector<std::vector<Cell>> getGrid();
-    std::vector<std::shared_ptr<Gold>> getGolds();
+    bool pcMove(std::string dir, std::map<std::string, int> PotionList);
+    std::shared_ptr<Potion> pcUsePotion(std::string dir);
+    std::shared_ptr<Enemy> pcAttack(std::string dir);
+    
+    
     Cell *findrandomCell(int avoid);
     int findChamber(int avoid);
+    std::vector<std::vector<Cell>> getGrid();
     std::vector<std::pair<char, int>> EnemiesTurn(bool merchanthostile);
 };
 

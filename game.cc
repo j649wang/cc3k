@@ -103,7 +103,7 @@ void Game::play(int floornum){
             ++ init;
         }
         display->bottomMessage(floornum, pc);
-        bool successMove;
+        bool successMove = false;
         string cmd;
         cin >> cmd;
         if(cin.eof()) break;
@@ -111,11 +111,22 @@ void Game::play(int floornum){
         if(cmd == "u"){
             string dir;
             cin >> dir;
-            successMove = pcUsePotion(dir);
+            shared_ptr<Potion> p = floor->pcUsePotion(dir);
+            if(p){
+                ++PotionList[p->getName()];
+                successMove = true;
+            }
+            
         }else if(cmd == "a"){
             string dir;
             cin >> dir;
-            successMove = pcAttack(dir);
+            shared_ptr<Enemy> e = floor->pcAttack(dir);
+            if(e){
+                if(e->isMerchant()){
+                    MerchantHostile = true;
+                }
+                 successMove = true;
+            }
         }else if(cmd == "q"){
             quitprogram = true;
             return;
@@ -124,9 +135,10 @@ void Game::play(int floornum){
             return;
         }else if((cmd == "no")||(cmd == "ne")||(cmd == "ea")||(cmd == "se")||
                  (cmd == "so")||(cmd == "sw")||(cmd == "we")||(cmd == "we")){
-            successMove = pcMove(cmd);
+            successMove = floor->pcMove(cmd, PotionList);
         }else {
             cout << "Invalid Command" << endl;
+            continue;
         }
         
         if(!successMove){
@@ -134,183 +146,8 @@ void Game::play(int floornum){
         }else {
             floor->EnemiesTurn(MerchantHostile);
         }
+        
         pos = &floor->getGrid()[pc->getRow()][pc->getCol()];
     }
 }
 
-bool Game::pcMove(string dir){
-    Cell *curCell = &floor->getGrid()[pc->getRow()][pc->getCol()];
-    Cell *targetCell= curCell->getneighbors()[dir];
-    cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-    cout << "curCell oc"  << curCell->getOverlapComponent() << endl;
-    cout << "targetCell dc"  << targetCell->getDisplayComponent() << endl;
-    cout << "targetCell oc"  << targetCell->getOverlapComponent() << endl;
-    vector<shared_ptr <Gold>> Golds = floor->getGolds();
-    bool successMove;
-    if(targetCell){
-        if(!targetCell->canPcWalk()){
-            successMove = false;
-        }else if(targetCell->getSymbol() == '\\'){
-            if(dir == "we"){
-                pc->move(targetCell, curCell);
-                successMove = true;
-            }else{
-                display->EnterStairMessage();
-                successMove = false;
-            }
-        }else {
-            cout << "Calling Player::Move" << endl;
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-            pc->move(targetCell, curCell);
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-            cout << "Exiting Player::Move" << endl;
-            
-            cout << "Calling Display::MoveMessage" << endl;
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-            display->moveMessage(dir);
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-            cout << "Exiting Display::MoveMessage" << endl;
-            
-            cout << "Calling Cell::findPotions" << endl;
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-            vector<shared_ptr<Potion>> potions = targetCell->findPotions();
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-            cout << "Exiting Cell::findPotions" << endl;
-            
-            cout << "finish finding Potion, moved to target" << endl;
-            
-            cout << "Calling Display::findpotion" << endl;
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-            display->findPotion(PotionList, potions);
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-            cout << "Exitng Display::findpotion" << endl;
-            
-            cout << "Calling Cell::getOverlapComponent" << endl;
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-            shared_ptr<Component> c = targetCell->getOverlapComponent();
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-            cout << "Exitng Cell::getOverlapComponent" << endl;
-            
-            if(c){
-                cout << "Calling Component::isGold" << endl;
-                cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-                cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-                if(c->isGold()){
-                    cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-                    cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-                    cout << "Exitng Component::isGold in if Clause" << endl;
-                    
-                    cout << "find Gold" << endl;
-                    shared_ptr<Gold> g = dynamic_pointer_cast<Gold>(c);
-                    
-                    cout << "Calling Player::pickGold" << endl;
-                    cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-                    cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-                int amount = pc->pickGold(g, targetCell);
-                    cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-                    cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-                    cout << "Exiting Player::pickGold" << endl;
-                    
-                    cout << "Calling Display::pickGoldMessage" << endl;
-                    cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-                    cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-                display->pickGoldMessage(amount);
-                    cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-                    cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-                    cout << "Exiting Display::pickGoldMessage" << endl;
-              }
-            }
-            successMove = true;
-        }
-    }else {
-        successMove = false;
-    }
-    
-  /*  if(successMove){
-        int i = 0; //check if player is near the DragonHoards;
-        for(auto g: Golds){
-            cout << "the " << i <<" time";
-            cout << "Start Finding Gold Pos" << endl;
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell oc"  << curCell->getOverlapComponent() << endl;
-            cout << "g is " << g << endl;
-            int row = g->getRow();
-            int col = g->getCol();
-            cout << "g.row is " << g->getRow() << ", "<< "g.col is " << g->getCol() << endl;
-            Cell *Goldpos = &floor->getGrid()[row][col];
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell oc"  << curCell->getOverlapComponent() << endl;
-            cout << "Finishing Finding Gold Pos" << endl;
-            
-            cout << "Start Finding Player" << endl;
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell oc"  << curCell->getOverlapComponent() << endl;
-            Cell *pcCell = Goldpos->findPlayer();
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell oc"  << curCell->getOverlapComponent() << endl;
-            cout << "Finishing Cell::findplayer" << endl;
-            
-            cout << "calling Gold::notifyDragon" << endl;
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell oc"  << curCell->getOverlapComponent() << endl;
-            g->notifyDragon(pcCell);
-            cout << "curCell dc"  << curCell->getDisplayComponent() << endl;
-            cout << "curCell dc"  << curCell->getOverlapComponent() << endl;
-            cout << "Exiting Gold::notifyDragon" << endl;
-            ++i;
-        }
-    }*/
-    return successMove;
-}
-            
-bool Game::pcUsePotion(string dir){
-    int row = pc->getRow();
-    int col = pc->getCol();
-    Cell *curCell = &floor->getGrid()[row][col];
-    Cell *targetCell= curCell->getneighbors()[dir];
-  if(targetCell){
-    shared_ptr<Component> c = targetCell->getDisplayComponent();
-    if(c->isPotion()){
-        shared_ptr<Potion> p =dynamic_pointer_cast<Potion>(c);
-        ++PotionList[p->getName()];
-        pc->drinkPotion(p, targetCell);
-        display->drinkPotionMessage(p);
-      return true;
-    }
-  }
-     return false;
-}
-
-bool Game::pcAttack(string dir){
-    int row = pc->getRow();
-    int col = pc->getCol();
-    Cell *curCell = &floor->getGrid()[row][col];
-    Cell *targetCell= curCell->getneighbors()[dir];
-    
-  if(targetCell){
-    shared_ptr<Component> c = targetCell->getDisplayComponent();
-      if(c){
-          if(c->isEnemy()){
-            shared_ptr<Enemy> e = dynamic_pointer_cast<Enemy>(c);
-            int damage = pc->attack(e, targetCell);
-            display->PcAttackMessage(damage, e);
-            if(e->isMerchant()){
-                MerchantHostile = true;
-            }
-            pc->did_attack();
-            return true;
-          }
-      }
-  }
-    return false;
-}

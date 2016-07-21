@@ -39,7 +39,7 @@ const int floorCol = 79;
 using namespace std;
 
 Floor:: Floor(shared_ptr<Display> display,shared_ptr<Player> pc):
-thedisplay{display}, pc{pc}, enemyTotal{20},potionTotal{10},goldTotal{10}{}
+thedisplay{display},pc{pc}, enemyTotal{20},potionTotal{10},goldTotal{10}{}
 
 Floor::~Floor(){
     theChambers.clear();
@@ -291,11 +291,14 @@ vector<pair<char, int>> Floor::EnemiesTurn(bool merchanthostile){
          });
     for(auto e: theEnemys){
         Cell *curCell = &theGrid[e->getRow()][e->getCol()];
+        cout << "Enemy: " << curCell << endl;
         Cell *playerCell = curCell->findPlayer();
+        cout << "Enemy: playercell" << playerCell << endl;
         Cell *walkCell = curCell->findWalkable();
+        cout << "Enemy: walkCell " << walkCell << endl;
         
         if(!e->isDead()){
-            if(pc->haveAttacked()){
+            if((pc->haveAttacked())&&(playerCell)){
                 if((e->isMerchant()&& merchanthostile)||(e->isHostile())){
                     int damage = e->attack(pc, playerCell);
                     enemyAttack.emplace_back(make_pair(e->getSymbol(), damage));
@@ -309,8 +312,91 @@ vector<pair<char, int>> Floor::EnemiesTurn(bool merchanthostile){
     pc->reset();
     return enemyAttack;
 }
-vector<shared_ptr<Gold>> Floor::getGolds(){ return theGolds;}
 
-vector<vector<Cell>> Floor::getGrid(){
-    return theGrid;
+bool Floor::pcMove(string dir, map<string, int> PotionList){
+    bool moveSuccess = false;
+    Cell *curCell = &theGrid[pc->getRow()][pc->getCol()];
+    Cell *targetCell= curCell->getneighbors()[dir];
+    if(targetCell){
+        if(!targetCell->canPcWalk()){
+            return false;
+        }else if(targetCell->getSymbol() == '\\'){
+            if(dir == "we"){
+                pc->move(targetCell, curCell);
+                moveSuccess = true;
+            }else{
+                thedisplay->failedMessage(dir);
+                thedisplay->EnterStairMessage();
+                return false;
+            }
+        }else {
+            pc->move(targetCell, curCell);
+            thedisplay->moveMessage(dir);
+            vector<shared_ptr<Potion>> potions = targetCell->findPotions();
+            thedisplay->findPotion(PotionList, potions);
+            shared_ptr<Component> c = targetCell->getOverlapComponent();
+            if(c){
+                if(c->isGold()){
+                    cout << "ready to pick Gold" << endl;
+                    shared_ptr<Gold> g = dynamic_pointer_cast<Gold>(c);
+                    int amount = pc->pickGold(g, targetCell);
+                    thedisplay->pickGoldMessage(amount);
+                }
+            }
+            moveSuccess = true;
+        }
+    }
+    if(moveSuccess){
+        for(auto g: theGolds){
+              int row = g->getRow();
+              int col = g->getCol();
+              Cell *Goldpos = &theGrid[row][col];
+              Cell *pcCell = Goldpos->findPlayer();
+            if(pcCell){
+             thedisplay->dragonHostileMessage();
+            }
+              g->notifyDragon(pcCell);
+          }
+     }
+    return moveSuccess;
 }
+
+shared_ptr<Potion> Floor::pcUsePotion(string dir){
+    int row = pc->getRow();
+    int col = pc->getCol();
+    Cell *curCell = &theGrid[row][col];
+    Cell *targetCell= curCell->getneighbors()[dir];
+    if(targetCell){
+        shared_ptr<Component> c = targetCell->getDisplayComponent();
+        if(c->isPotion()){
+            shared_ptr<Potion> p =dynamic_pointer_cast<Potion>(c);
+            pc->drinkPotion(p, targetCell);
+            thedisplay->drinkPotionMessage(p);
+            return p;
+        }
+    }
+    return nullptr;
+}
+
+shared_ptr<Enemy> Floor::pcAttack(string dir){
+    int row = pc->getRow();
+    int col = pc->getCol();
+    Cell *curCell = &theGrid[row][col];
+    Cell *targetCell= curCell->getneighbors()[dir];
+    
+    if(targetCell){
+        shared_ptr<Component> c = targetCell->getDisplayComponent();
+        if(c){
+            if(c->isEnemy()){
+                shared_ptr<Enemy> e = dynamic_pointer_cast<Enemy>(c);
+                int damage = pc->attack(e, targetCell);
+                thedisplay->PcAttackMessage(damage, e);
+                pc->did_attack();
+                return e;
+            }
+        }
+    }
+    return nullptr;
+}
+
+vector<vector<Cell>> Floor::getGrid(){ return theGrid; }
