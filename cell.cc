@@ -39,7 +39,7 @@ void Cell::setSymbol(char s){
 vector<Cell *> Cell::getneighbors() const{ return neighbors;}
 
 bool Cell::canPcWalk() const{;
-    if(dynamic_pointer_cast<Gold>(displayComponent)){
+    if(displayComponent->isGold()){
         //walk on gold
         return true;
     }else{
