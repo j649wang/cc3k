@@ -23,5 +23,7 @@ class Gold: public item{
     virtual ~Gold() = 0;
     
     virtual void addDragon(Cell *curpos);
+    
+    virtual bool isDragonHoard() const;
 };
 #endif

@@ -26,3 +26,5 @@ void DragonHoard::setGuard(shared_ptr<Component> dragon){
 bool DragonHoard::canPickUp() const{
     return guard->isDead();
 }
+
+bool DragonHoard::isDragonHoard() const {return true;}

@@ -7,4 +7,4 @@
 //
 
 #include "ba.h"
-BA::BA():Potion("BA", "increase ATK by 5", 0, 5, 0){}
+BA::BA():Potion("BA", 0, 5, 0){}

@@ -36,9 +36,8 @@ void Display::beginMessage(){
 void Display::EnterStairMessage(){
     action = action + ". PC must move to Stair from the right";
 }
-void Display::invalidCommane(){
-    cout << "invalid Command!" << endl;
-    action = "";
+void Display::invalidCommand(){
+    action = "Invalid Command!";
 }
 
 void Display::RaceinvalidCommand(){
@@ -88,7 +87,7 @@ void Display::findPotion(map<string, int> potionList, const vector<shared_ptr<Po
             if(potionList[name] != 0){
                 ++list[name];
             }else {
-                ++list["Unknown"];
+                ++list["unknown"];
             }
         }
         
@@ -105,7 +104,7 @@ void Display::findPotion(map<string, int> potionList, const vector<shared_ptr<Po
 };
 
 void Display::drinkPotionMessage(const shared_ptr<Potion> &potion){
-    action = "PC uses a " + potion->getName() + " Potion";
+    action = "PC uses a " + potion->getName() + " potion";
 }
 
 void Display::pickGoldMessage(int amount){
@@ -172,7 +171,7 @@ void Display::lostMessage(){
 void Display::scoreMessage(shared_ptr<Player> pc){
     stringstream score;
     score << pc->getScore();
-    action = action + " Your Score is " + score.str();
+    action = action + " Your score is " + score.str();
 }
 
 void Display::enterNextLevel(){

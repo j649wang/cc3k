@@ -8,4 +8,4 @@
 
 #include "rh.h"
 
-RH::RH():Potion("RG", "restore 10 HP", 10,0,0) {}
+RH::RH():Potion("RH", 10,0,0) {}

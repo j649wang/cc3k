@@ -6,8 +6,8 @@ using namespace std;
 
 class player;
 
-Potion::Potion(string name,string feature,int HPeffect,int ATKeffect,int DEFeffect,char symbol):
-item(symbol), description{feature},name{name},HPeffect{HPeffect},ATKeffect{ATKeffect},DEFeffect{DEFeffect} {}
+Potion::Potion(string name,int HPeffect,int ATKeffect,int DEFeffect,char symbol):
+item(symbol), name{name},HPeffect{HPeffect},ATKeffect{ATKeffect},DEFeffect{DEFeffect} {}
 
 Potion::~Potion(){}
 

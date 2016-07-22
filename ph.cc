@@ -7,4 +7,4 @@
 //
 
 #include "ph.h"
-PH::PH():Potion("PH", "lose 10 HP", -10, 0, 0){}
+PH::PH():Potion("PH", -10, 0, 0){}

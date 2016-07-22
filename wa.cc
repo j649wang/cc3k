@@ -7,4 +7,4 @@
 //
 
 #include "wa.h"
-WA::WA():Potion("WA", "decrease ATK by 5", 0, -5, 0){}
+WA::WA():Potion("WA", 0, -5, 0){}

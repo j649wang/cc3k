@@ -13,6 +13,7 @@ class DragonHoard: public Gold{
 	void notifyDragon(Cell *Playernear) override;
     void addDragon(Cell *curpos) override;
     bool canPickUp() const override;
+    bool isDragonHoard() const override;
 };
 
 #endif

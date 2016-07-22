@@ -7,4 +7,4 @@
 //
 
 #include "wd.h"
-WD::WD():Potion("WD","decrease DEF by 5", 0, 0, -5){}
+WD::WD():Potion("WD", 0, 0, -5){}

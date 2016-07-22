@@ -134,10 +134,10 @@ void Game::play(int floornum){
             quitgame = true;
             return;
         }else if((cmd == "no")||(cmd == "ne")||(cmd == "ea")||(cmd == "se")||
-                 (cmd == "so")||(cmd == "sw")||(cmd == "we")||(cmd == "we")){
+                 (cmd == "so")||(cmd == "sw")||(cmd == "nw")||(cmd == "we")){
             successMove = floor->pcMove(cmd, PotionList);
         }else {
-            cout << "Invalid Command" << endl;
+            display->invalidCommand();
             continue;
         }
         

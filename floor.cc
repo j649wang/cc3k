@@ -291,11 +291,8 @@ vector<pair<char, int>> Floor::EnemiesTurn(bool merchanthostile){
          });
     for(auto e: theEnemys){
         Cell *curCell = &theGrid[e->getRow()][e->getCol()];
-        cout << "Enemy: " << curCell << endl;
         Cell *playerCell = curCell->findPlayer();
-        cout << "Enemy: playercell" << playerCell << endl;
         Cell *walkCell = curCell->findWalkable();
-        cout << "Enemy: walkCell " << walkCell << endl;
         
         if(!e->isDead()){
             if((pc->haveAttacked())&&(playerCell)){
@@ -348,15 +345,15 @@ bool Floor::pcMove(string dir, map<string, int> PotionList){
     }
     if(moveSuccess){
         for(auto g: theGolds){
-              int row = g->getRow();
-              int col = g->getCol();
-              Cell *Goldpos = &theGrid[row][col];
+            if(g->isDragonHoard( )&& (g->getValue() > 0)){
+              Cell *Goldpos = &theGrid[g->getRow()][g->getCol()];
               Cell *pcCell = Goldpos->findPlayer();
-            if(pcCell){
-             thedisplay->dragonHostileMessage();
+                if((pcCell)||(Goldpos->getSymbol() == '@')){
+                    thedisplay->dragonHostileMessage();
+                }
+                g->notifyDragon(pcCell);
             }
-              g->notifyDragon(pcCell);
-          }
+        }
      }
     return moveSuccess;
 }
@@ -368,11 +365,13 @@ shared_ptr<Potion> Floor::pcUsePotion(string dir){
     Cell *targetCell= curCell->getneighbors()[dir];
     if(targetCell){
         shared_ptr<Component> c = targetCell->getDisplayComponent();
-        if(c->isPotion()){
-            shared_ptr<Potion> p =dynamic_pointer_cast<Potion>(c);
-            pc->drinkPotion(p, targetCell);
-            thedisplay->drinkPotionMessage(p);
-            return p;
+        if(c){
+            if(c->isPotion()){
+                shared_ptr<Potion> p =dynamic_pointer_cast<Potion>(c);
+                pc->drinkPotion(p, targetCell);
+                thedisplay->drinkPotionMessage(p);
+                return p;
+            }
         }
     }
     return nullptr;

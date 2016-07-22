@@ -20,7 +20,7 @@ class Potion: public item{
 	int getATKeffect() const;
 	int getDEFeffect() const;
     bool isPotion() const override;
-    Potion(std::string name,std::string feature, int HPeffect,int ATKeffect,int DEFeffect,char symbol = 'P');
+    Potion(std::string name, int HPeffect,int ATKeffect,int DEFeffect,char symbol = 'P');
 	virtual ~Potion() = 0;
 };
 

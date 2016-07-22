@@ -41,7 +41,7 @@ public:
     void EnterStairMessage();
     void bottomMessage(int level, const std::shared_ptr<Player> &pc) const; //
     
-    void invalidCommane();
+    void invalidCommand();
     void moveMessage(std::string dir);//
     void findPotion(std::map<std::string, int> potionList,
                     const std::vector<std::shared_ptr<Potion>> &potion); //

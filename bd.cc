@@ -7,4 +7,4 @@
 //
 
 #include "bd.h"
-BD::BD():Potion("BD", "increase DEF by 5", 0, 0, 5){}
+BD::BD():Potion("BD", 0, 0, 5){}
