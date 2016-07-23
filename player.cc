@@ -57,9 +57,9 @@ bool Player::move(Cell *targetcell, Cell *curcell){
     return true;
 }
 
-double Player::getScore() {
+int Player::getScore(){
     if(reachedStair){
-        return getGold()*1000 + 500;
+        return getGold()*1000+500;
     }else {
         return getGold()*1000;
     }

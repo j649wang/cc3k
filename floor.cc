@@ -339,7 +339,7 @@ shared_ptr<Enemy> Floor::pcAttack(string dir){
 }
 
 
-bool Floor::pcMove(string dir, map<string, int> PotionList){
+bool Floor::pcMove(string dir){
     bool moveSuccess = false;
     Cell *curCell = &theGrid[pc->getRow()][pc->getCol()];
     Cell *targetCell= curCell->getneighbors()[dir];
@@ -360,8 +360,6 @@ bool Floor::pcMove(string dir, map<string, int> PotionList){
         }else {
             pc->move(targetCell, curCell);
             thedisplay->moveMessage(dir);
-            vector<shared_ptr<Potion>> potions = targetCell->findPotions();
-            thedisplay->findPotion(PotionList, potions);
             shared_ptr<Component> c = targetCell->getOverlapComponent();
             if(c){
                 if(c->isGold()){
@@ -388,6 +386,11 @@ bool Floor::pcMove(string dir, map<string, int> PotionList){
         }
     }
     return moveSuccess;
+}
+vector<shared_ptr<Potion>> Floor::findPotion(){
+    Cell *targetCell = &theGrid[pc->getRow()][pc->getCol()];
+    vector<shared_ptr<Potion>> potions = targetCell->findPotions();
+    return potions;
 }
 
 shared_ptr<Potion> Floor::pcUsePotion(string dir){

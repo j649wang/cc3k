@@ -88,7 +88,7 @@ void Game::start(){
 
 void Game::play(int floornum){
     int init = 0;
-    while(!isLost()&&(!pc->hasReachedStair())){
+    while(!pc->hasReachedStair()){
         cout << display;
         if(init == 0){
             if(floornum == 1){
@@ -99,6 +99,9 @@ void Game::play(int floornum){
             ++ init;
         }
         display->bottomMessage(floornum, pc);
+        if(isLost()) {
+         break;
+        }
         bool successMove = false;
         string cmd;
         cin >> cmd;
@@ -140,7 +143,7 @@ void Game::play(int floornum){
             return;
         }else if((cmd == "no")||(cmd == "ne")||(cmd == "ea")||(cmd == "se")||
                  (cmd == "so")||(cmd == "sw")||(cmd == "nw")||(cmd == "we")){
-            successMove = floor->pcMove(cmd, PotionList);
+            successMove = floor->pcMove(cmd);
         }else {
             display->invalidCommand();
             continue;
@@ -150,6 +153,7 @@ void Game::play(int floornum){
             display->failedMessage(cmd);
         }
         display->EnemyAttackMessage(floor->EnemiesTurn(MerchantHostile));
-   }
+        display->findPotion(PotionList, floor->findPotion());
+    }
 }
 

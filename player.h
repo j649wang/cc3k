@@ -20,7 +20,7 @@ class Player: public Character, public std::enable_shared_from_this<Player>{
     bool move(Cell *targetcell, Cell *curcell) override;
     virtual void drinkPotion(std::shared_ptr<Potion> p, Cell *targetcell);
     virtual int pickGold(std::shared_ptr<Gold> g, Cell *curcell);
-    virtual double getScore();
+    virtual int getScore();
     bool hasReachedStair() const;
     void setReachedStair();
     virtual ~Player() = 0;

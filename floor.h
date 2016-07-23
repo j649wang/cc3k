@@ -39,10 +39,10 @@ public:
     int generatePC();
     void generateStair(int i);
     
-    bool pcMove(std::string dir, std::map<std::string, int> PotionList);
+    bool pcMove(std::string dir);
     std::shared_ptr<Potion> pcUsePotion(std::string dir);
     std::shared_ptr<Enemy> pcAttack(std::string dir);
-    
+    std::vector<std::shared_ptr<Potion>> findPotion();
     
     Cell *findrandomCell(int avoid);
     int findChamber(int avoid);
@@ -50,3 +50,4 @@ public:
 };
 
 #endif /* Floor_hpp */
+

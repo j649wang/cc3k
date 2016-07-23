@@ -5,8 +5,8 @@
 //override getScore
 class Human: public Player{
   public:
-	Human();
-    double getScore() override;
+    Human();
+    int getScore() override;
 };
 
 #endif

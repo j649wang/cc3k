@@ -173,7 +173,7 @@ void Display::lostMessage(){
 }
 void Display::scoreMessage(shared_ptr<Player> pc){
     stringstream score;
-    score << pc->getScore();
+    score << pc->getScore(); 
     cout <<" Your score is " + score.str()+"." << endl;
 }
 
