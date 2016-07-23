@@ -1,11 +1,3 @@
-//
-//  Floor.cpp
-//  cc3k.cs246.Final
-//
-//  Created by Zoey on 16/7/14.
-//  Copyright © 2016年 Zoey. All rights reserved.
-//
-
 #include <sstream>
 #include <fstream>
 #include "floor.h"
@@ -39,7 +31,15 @@ const int floorCol = 79;
 using namespace std;
 
 Floor:: Floor(shared_ptr<Display> display,shared_ptr<Player> pc):
-thedisplay{display},pc{pc}, enemyTotal{20},potionTotal{10},goldTotal{10}{}
+potionTotal{10},enemyTotal{20},goldTotal{10}, pc{pc}, thedisplay{display}{}
+
+void Floor::clear(){
+    theEnemys.clear();
+    theGrid.clear();
+    theChambers.clear();
+    thePotions.clear();
+    theGolds.clear();
+}
 
 Floor::~Floor(){
     theChambers.clear();
@@ -135,7 +135,9 @@ void Floor::init(std::fstream &file, bool randomgeneration){
             theGrid[row][col].attach(((row-1 >= 0)&&(col-1 >= 0))? &theGrid[row-1][col+1]: nullptr, "ne");
         }
     }
-    
+    for(int i = 0; i < 5; ++i){
+        theChambers.emplace_back();
+    }
     for(int row = 0; row < floorRow; ++row){     // assign chambers
         for(int col = 0; col < floorCol; ++col){
             Cell *cell = &theGrid[row][col];
@@ -162,6 +164,14 @@ void Floor::init(std::fstream &file, bool randomgeneration){
     }
     if(randomgeneration){
         setcomponent();
+    }else {
+        for(auto g: theGolds){
+            if(g->isDragonHoard()){
+                Cell * gPos = &theGrid[g->getRow()][g->getCol()];
+                shared_ptr<Component> dragon =gPos->findDragon();
+                g->setGuard(dynamic_pointer_cast<Dragon>(dragon));
+            }
+        }
     }
 }
 
@@ -241,7 +251,6 @@ void Floor::generateGold(){
             theGolds.back()->setGuard(theEnemys.back());
             -- enemyTotal;
             
-            cout << "generate a Dragon Hoard, should find a D nearby" << endl;
             Cell *dragonPos = targetcell->findWalkable();
             theEnemys.back()->setCoords(*dragonPos);
             dragonPos->setDisplayComponent(theEnemys.back());
@@ -269,7 +278,6 @@ void Floor::generateStair(int avoid){
 
 void Floor::setcomponent(){
     int avoid = generatePC();
-    cout << pc->getName() << endl;
     generateStair(avoid);
     generatePotion();
     generateGold();
@@ -279,7 +287,7 @@ void Floor::setcomponent(){
 
 vector<pair<char, int>> Floor::EnemiesTurn(bool merchanthostile){
     vector<pair<char, int>> enemyAttack;
-    sort(theEnemys.begin(),theEnemys.end(),     //sort the theEnemy line by line fashion
+    sort(theEnemys.begin(),theEnemys.end(),           //sort the theEnemy line by line fashion
          [] (const shared_ptr<Enemy>& e1, const shared_ptr<Enemy>& e2){
              if(e1->getRow() < e2->getRow()){
                  return true;
@@ -295,7 +303,7 @@ vector<pair<char, int>> Floor::EnemiesTurn(bool merchanthostile){
         Cell *walkCell = curCell->findWalkable();
         
         if(!e->isDead()){
-            if((pc->haveAttacked())&&(playerCell)){
+            if(playerCell){
                 if((e->isMerchant()&& merchanthostile)||(e->isHostile())){
                     int damage = e->attack(pc, playerCell);
                     enemyAttack.emplace_back(make_pair(e->getSymbol(), damage));
@@ -306,75 +314,7 @@ vector<pair<char, int>> Floor::EnemiesTurn(bool merchanthostile){
             }
         }
     }
-    pc->reset();
     return enemyAttack;
-}
-
-bool Floor::pcMove(string dir, map<string, int> PotionList){
-    bool moveSuccess = false;
-    Cell *curCell = &theGrid[pc->getRow()][pc->getCol()];
-    Cell *targetCell= curCell->getneighbors()[dir];
-    if(targetCell){
-        if(!targetCell->canPcWalk()){
-            return false;
-        }else if(targetCell->getSymbol() == '\\'){
-            if(dir == "we"){
-                pc->move(targetCell, curCell);
-                moveSuccess = true;
-            }else{
-                thedisplay->failedMessage(dir);
-                thedisplay->EnterStairMessage();
-                return false;
-            }
-        }else {
-            pc->move(targetCell, curCell);
-            thedisplay->moveMessage(dir);
-            vector<shared_ptr<Potion>> potions = targetCell->findPotions();
-            thedisplay->findPotion(PotionList, potions);
-            shared_ptr<Component> c = targetCell->getOverlapComponent();
-            if(c){
-                if(c->isGold()){
-                    cout << "ready to pick Gold" << endl;
-                    shared_ptr<Gold> g = dynamic_pointer_cast<Gold>(c);
-                    int amount = pc->pickGold(g, targetCell);
-                    thedisplay->pickGoldMessage(amount);
-                }
-            }
-            moveSuccess = true;
-        }
-    }
-    if(moveSuccess){
-        for(auto g: theGolds){
-            if(g->isDragonHoard( )&& (g->getValue() > 0)){
-              Cell *Goldpos = &theGrid[g->getRow()][g->getCol()];
-              Cell *pcCell = Goldpos->findPlayer();
-                if((pcCell)||(Goldpos->getSymbol() == '@')){
-                    thedisplay->dragonHostileMessage();
-                }
-                g->notifyDragon(pcCell);
-            }
-        }
-     }
-    return moveSuccess;
-}
-
-shared_ptr<Potion> Floor::pcUsePotion(string dir){
-    int row = pc->getRow();
-    int col = pc->getCol();
-    Cell *curCell = &theGrid[row][col];
-    Cell *targetCell= curCell->getneighbors()[dir];
-    if(targetCell){
-        shared_ptr<Component> c = targetCell->getDisplayComponent();
-        if(c){
-            if(c->isPotion()){
-                shared_ptr<Potion> p =dynamic_pointer_cast<Potion>(c);
-                pc->drinkPotion(p, targetCell);
-                thedisplay->drinkPotionMessage(p);
-                return p;
-            }
-        }
-    }
-    return nullptr;
 }
 
 shared_ptr<Enemy> Floor::pcAttack(string dir){
@@ -390,7 +330,7 @@ shared_ptr<Enemy> Floor::pcAttack(string dir){
                 shared_ptr<Enemy> e = dynamic_pointer_cast<Enemy>(c);
                 int damage = pc->attack(e, targetCell);
                 thedisplay->PcAttackMessage(damage, e);
-                pc->did_attack();
+                if(e->isDead()) pc->setGold(pc->getGold() + e->getGold());
                 return e;
             }
         }
@@ -398,4 +338,74 @@ shared_ptr<Enemy> Floor::pcAttack(string dir){
     return nullptr;
 }
 
-vector<vector<Cell>> Floor::getGrid(){ return theGrid; }
+
+bool Floor::pcMove(string dir, map<string, int> PotionList){
+    bool moveSuccess = false;
+    Cell *curCell = &theGrid[pc->getRow()][pc->getCol()];
+    Cell *targetCell= curCell->getneighbors()[dir];
+    if(targetCell){
+        if(!targetCell->canPcWalk()){
+            thedisplay->failedMessage(dir);
+            return false;
+        }else if(targetCell->getSymbol() == '\\'){
+            if(dir == "we"){
+                pc->move(targetCell, curCell);
+                moveSuccess = true;
+                pc->setReachedStair();
+            }else{
+                thedisplay->failedMessage(dir);
+                thedisplay->EnterStairMessage();
+                return false;
+            }
+        }else {
+            pc->move(targetCell, curCell);
+            thedisplay->moveMessage(dir);
+            vector<shared_ptr<Potion>> potions = targetCell->findPotions();
+            thedisplay->findPotion(PotionList, potions);
+            shared_ptr<Component> c = targetCell->getOverlapComponent();
+            if(c){
+                if(c->isGold()){
+                    shared_ptr<Gold> g = dynamic_pointer_cast<Gold>(c);
+                    int amount = pc->pickGold(g, targetCell);
+                    thedisplay->pickGoldMessage(amount);
+                }
+            }
+            moveSuccess = true;
+        }
+    }
+    if(moveSuccess){
+        for(auto g: theGolds){
+            if(g->isDragonHoard( )&& (g->getValue() > 0)){
+                Cell *Goldpos = &theGrid[g->getRow()][g->getCol()];
+                Cell *pcCell = Goldpos->findPlayer();
+                if(((pcCell)||(Goldpos->getSymbol() == '@'))&&(!g->canPickUp())){
+                    thedisplay->dragonHostileMessage();
+                    g->notifyDragon(Goldpos);
+                }else{
+                    g->notifyDragon(nullptr);
+                }
+            }
+        }
+    }
+    return moveSuccess;
+}
+
+shared_ptr<Potion> Floor::pcUsePotion(string dir){
+    int row = pc->getRow();
+    int col = pc->getCol();
+    Cell *curCell = &theGrid[row][col];
+    Cell *targetCell= curCell->getneighbors()[dir];
+    if(targetCell){
+        shared_ptr<Component> c = targetCell->getDisplayComponent();
+        if(c){
+            if(c->isPotion()){
+                shared_ptr<Potion> p =dynamic_pointer_cast<Potion>(c);
+                pc->drinkPotion(p, targetCell);
+                thedisplay->drinkPotionMessage(p);
+                pc->move(targetCell, curCell);
+                return p;
+            }
+        }
+    }
+    return nullptr;
+}

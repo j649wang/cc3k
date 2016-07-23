@@ -7,3 +7,4 @@ class Werewolf: public Enemy {
     Werewolf();
 };
 #endif
+

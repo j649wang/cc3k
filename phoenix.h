@@ -1,10 +1,3 @@
-//
-//  Phoenix.hpp
-//  cc3k.cs246.Final
-//
-//  Created by Zoey on 16/7/17.
-//  Copyright © 2016年 Zoey. All rights reserved.
-//
 
 #ifndef Phoenix_hpp
 #define Phoenix_hpp
@@ -16,3 +9,4 @@ public:
 };
 
 #endif /* Phoenix_hpp */
+

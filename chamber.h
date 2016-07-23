@@ -1,10 +1,3 @@
-//
-//  chamber.hpp
-//  cc3k.cs246.Final
-//
-//  Created by Zoey on 16/7/15.
-//  Copyright © 2016年 Zoey. All rights reserved.
-//
 
 #ifndef chamber_hpp
 #define chamber_hpp

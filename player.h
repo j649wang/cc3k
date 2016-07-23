@@ -10,21 +10,19 @@ class Potion;
 class Enemy;
 
 class Player: public Character, public std::enable_shared_from_this<Player>{
-	bool attacked;
     std::string name;
+    bool reachedStair;
   public:
     Player(int HP,int ATK,int DEF, std::string name, char symbol = '@');
-	bool haveAttacked();
-    void setAtkDef();
     void reset();
     std::string getName();
-    void did_attack();
     bool isPlayer() const override;
     bool move(Cell *targetcell, Cell *curcell) override;
     virtual void drinkPotion(std::shared_ptr<Potion> p, Cell *targetcell);
     virtual int pickGold(std::shared_ptr<Gold> g, Cell *curcell);
     virtual double getScore();
-    bool hasReachedStair(Cell *targetcell);
+    bool hasReachedStair() const;
+    void setReachedStair();
     virtual ~Player() = 0;
 };
 

@@ -9,20 +9,16 @@
 using namespace std;
 
 Player::Player(int HP,int ATK,int DEF,string name, char symbol):
-Character(HP, ATK, DEF, symbol), attacked{false}, name{name} {}
+Character(HP, ATK, DEF, symbol), name{name},reachedStair{false}{}
 
 Player::~Player(){};
 
-void Player::setAtkDef() {
+void Player::reset() {
     setATK(getOrigATK());
     setDEF(getOrigDEF());
+    reachedStair = false;
 };
 
-bool Player::haveAttacked(){return attacked;}
-
-void Player::did_attack(){attacked = true;}
-
-void Player::reset(){ attacked = false;}
 
 bool Player::isPlayer() const{ return true;}
 
@@ -33,14 +29,16 @@ void Player::drinkPotion(shared_ptr<Potion> p, Cell *targetcell){
     setATK(getATK() + p->getATKeffect());
     setDEF(getDEF() + p->getDEFeffect());
     targetcell->componentLeft();
-    cout << "potion left" << endl;
+
 }
 
 int Player::pickGold(shared_ptr<Gold> g, Cell *curcell){
     if(g->canPickUp()){
-        setGold(getGold() + g->getValue());
-        curcell->setOverlapComponent(nullptr); 
-        return g->getValue();
+        int amount = g->getValue();
+        setGold(Character::getGold() + g->getValue());
+        curcell->setOverlapComponent(nullptr);
+        g->setValue(0);
+        return amount;
     }
     return 0;
 }
@@ -60,8 +58,17 @@ bool Player::move(Cell *targetcell, Cell *curcell){
 }
 
 double Player::getScore() {
-    return getGold();
+    if(reachedStair){
+        return getGold()*1000 + 500;
+    }else {
+        return getGold()*1000;
+    }
 }
-bool Player::hasReachedStair(Cell *targetcell){
-    return targetcell->getSymbol() == '\\';
+
+bool Player::hasReachedStair() const{
+    return reachedStair;
+}
+
+void Player::setReachedStair(){
+    reachedStair = true;
 }

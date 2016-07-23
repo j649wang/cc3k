@@ -1,10 +1,3 @@
-//
-//  Game.cpp
-//  cc3k.cs246.Final
-//
-//  Created by Zoey on 16/7/14.
-//  Copyright © 2016年 Zoey. All rights reserved.
-//
 
 #include "game.h"
 #include "floor.h"
@@ -22,8 +15,8 @@ using namespace std;
 
 const int targetfloor = 5;
 
-Game::Game(std::string inputFile):
-display{make_shared<Display>()},pc{make_shared<Human>()},quitprogram{false},filename{inputFile},MerchantHostile{false}, quitgame{false},floor{nullptr}{
+Game::Game(std::string inputFile):MerchantHostile{false},floor{nullptr},pc{make_shared<Human>()},
+display{make_shared<Display>()},quitprogram{false},quitgame{false}, randomgeneration{false},filename{inputFile}{
     if(filename == "map.txt"){
         randomgeneration = true;
     }
@@ -36,13 +29,11 @@ bool Game::quitProgram() {return quitprogram;}
 Game::~Game(){}
 
 bool Game::isWin(){
-    int row = pc->getRow();
-    int col = pc->getCol();
-    return pc->hasReachedStair(&floor->getGrid()[row][col]);
+    return pc->hasReachedStair();
 }
 
 bool Game::isLost(){
-    return (!pc->isDead());
+    return (pc->isDead());
 }
 
 void Game::chooserace(){
@@ -70,19 +61,25 @@ void Game::chooserace(){
             display->RaceinvalidCommand();
         }
     }
-   floor = make_shared<Floor>(display, pc);
 }
 void Game::start(){
     fstream file;
     file.open(filename);
-    floor->init(file, randomgeneration);
-    play(1);
-    //     if((pc->isDead())||(quitprogram)||(quitgame)) break;
-    // }
-    if((!quitgame)||(!quitprogram)){
+    floor = make_shared<Floor>(display, pc);
+    for (int i = 1; i <=targetfloor; ++i){
+        pc->reset();
+        floor->clear();
+        floor->init(file, randomgeneration);
+        play(i);
+        if((pc->isDead())||(quitprogram)||(quitgame)){
+            break;
+        }
+     }
+    
+    if((!quitgame)&&(!quitprogram)){
         if(isWin()){
             display->winningMessage();
-        }else{
+        }if(isLost()){
             display->lostMessage();
         }
         display->scoreMessage(pc);
@@ -91,8 +88,7 @@ void Game::start(){
 
 void Game::play(int floornum){
     int init = 0;
-    Cell *pos = &floor->getGrid()[pc->getRow()][pc->getCol()];
-    while(!isLost()||!pc->hasReachedStair(pos)){
+    while(!isLost()&&(!pc->hasReachedStair())){
         cout << display;
         if(init == 0){
             if(floornum == 1){
@@ -111,15 +107,24 @@ void Game::play(int floornum){
         if(cmd == "u"){
             string dir;
             cin >> dir;
+            if((dir != "no")&&(dir != "ne")&&(dir != "ea")&&(dir != "se")&&
+               (dir != "so")&&(dir != "sw")&&(dir != "nw")&&(dir != "we")){
+                display->invalidCommand();
+                continue;
+            }
             shared_ptr<Potion> p = floor->pcUsePotion(dir);
             if(p){
                 ++PotionList[p->getName()];
                 successMove = true;
             }
-            
         }else if(cmd == "a"){
             string dir;
             cin >> dir;
+            if((dir != "no")&&(dir != "ne")&&(dir != "ea")&&(dir != "se")&&
+               (dir != "so")&&(dir != "sw")&&(dir != "nw")&&(dir != "we")){
+                display->invalidCommand();
+                continue;
+            }
             shared_ptr<Enemy> e = floor->pcAttack(dir);
             if(e){
                 if(e->isMerchant()){
@@ -141,13 +146,10 @@ void Game::play(int floornum){
             continue;
         }
         
-        if(!successMove){
+        if((!successMove)&&((cmd == "u")||(cmd == "a"))){
             display->failedMessage(cmd);
-        }else {
-            floor->EnemiesTurn(MerchantHostile);
         }
-        
-        pos = &floor->getGrid()[pc->getRow()][pc->getCol()];
-    }
+        display->EnemyAttackMessage(floor->EnemiesTurn(MerchantHostile));
+   }
 }
 

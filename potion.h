@@ -9,14 +9,12 @@ class Player;
 
 class Potion: public item{
 	std::string name;
-    std::string description;
-	int HPeffect;
+   	int HPeffect;
 	int ATKeffect;
 	int DEFeffect;
   public:
 	std::string getName() const;
-    std::string describe() const;
-	int getHPeffect() const;
+    	int getHPeffect() const;
 	int getATKeffect() const;
 	int getDEFeffect() const;
     bool isPotion() const override;

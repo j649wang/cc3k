@@ -1,13 +1,3 @@
-
-
-//
-//  Cell.cpp
-//  cc3k.cs246.Final
-//
-//  Created by Zoey on 16/7/14.
-//  Copyright © 2016年 Zoey. All rights reserved.
-//
-
 #include "cell.h"
 #include "display.h"
 #include "player.h"
@@ -16,7 +6,7 @@
 
 using namespace std;
 
-Cell::Cell(int row, int col, std::shared_ptr<Display> display, char symbol):row{row}, col{col}, theDisplay{display}, displayComponent{nullptr}, overlapComponent{nullptr},chamber{-1}, symbol{symbol}{}
+Cell::Cell(int row, int col, std::shared_ptr<Display> display, char symbol):row{row}, col{col},chamber{-1}, theDisplay{display}, displayComponent{nullptr}, overlapComponent{nullptr}, symbol{symbol}{}
 
 void Cell::notifydisplay(){
     theDisplay->notify(*this);

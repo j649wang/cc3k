@@ -1,12 +1,4 @@
 
-//
-//  Floor.hpp
-//  cc3k.cs246.Final
-//
-//  Created by Zoey on 16/7/14.
-//  Copyright © 2016年 Zoey. All rights reserved.
-//
-
 #ifndef Floor_hpp
 #define Floor_hpp
 
@@ -30,7 +22,7 @@ class Floor{
     std::shared_ptr<Player> pc;
     std::shared_ptr<Display> thedisplay;
     std::vector<std::vector<Cell>> theGrid;
-    std::vector<Chamber> theChambers{5};
+    std::vector<Chamber> theChambers;
     std::vector<std::shared_ptr<Enemy>> theEnemys;
     std::vector<std::shared_ptr<Potion>> thePotions;
     std::vector<std::shared_ptr<Gold>> theGolds;
@@ -40,6 +32,7 @@ public:
     void init(std::fstream &file, bool randomgeneration);
     void setcomponent();
     
+    void clear();
     void generateEnemy();
     void generatePotion();
     void generateGold();
@@ -53,7 +46,6 @@ public:
     
     Cell *findrandomCell(int avoid);
     int findChamber(int avoid);
-    std::vector<std::vector<Cell>> getGrid();
     std::vector<std::pair<char, int>> EnemiesTurn(bool merchanthostile);
 };
 

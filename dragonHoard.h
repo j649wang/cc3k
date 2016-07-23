@@ -8,10 +8,9 @@
 class DragonHoard: public Gold{
 	std::shared_ptr<Component> guard;
   public:
-	DragonHoard();
+    DragonHoard();
     void setGuard(std::shared_ptr<Component> guard) override;
-	void notifyDragon(Cell *Playernear) override;
-    void addDragon(Cell *curpos) override;
+    void notifyDragon(Cell *Playernear) override;
     bool canPickUp() const override;
     bool isDragonHoard() const override;
 };

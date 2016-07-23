@@ -11,7 +11,6 @@
 #include "gold.h"
 
 class SmallHoard: public Gold{
-    
 public:
     SmallHoard();
 };

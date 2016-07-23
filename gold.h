@@ -20,9 +20,9 @@ class Gold: public item{
     
     bool isGold() const override;
     
-    virtual ~Gold() = 0;
+    void setValue(int i);
     
-    virtual void addDragon(Cell *curpos);
+    virtual ~Gold() = 0;   
     
     virtual bool isDragonHoard() const;
 };

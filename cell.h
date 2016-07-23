@@ -1,8 +1,3 @@
-//
-//  Cell.hpp
-//  cc3k.cs246.Final
-//
-//  Created by Zoey on 16/7/14.
 //  Copyright © 2016年 Zoey. All rights reserved.
 //
 
