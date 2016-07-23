@@ -152,8 +152,9 @@ void Game::play(int floornum){
         if((!successMove)&&((cmd == "u")||(cmd == "a"))){
             display->failedMessage(cmd);
         }
-        display->EnemyAttackMessage(floor->EnemiesTurn(MerchantHostile));
+        
         display->findPotion(PotionList, floor->findPotion());
+        display->EnemyAttackMessage(floor->EnemiesTurn(MerchantHostile));
     }
 }
 

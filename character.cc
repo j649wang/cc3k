@@ -21,7 +21,8 @@ void Character::setHP(int hp){
     }
 }
 void Character::setGold(int g){
-    gold = g;
+    double goldnum = Character::getGold();
+    gold = goldnum + g;
 }
 
 double Character::getGold() const{ return gold;}

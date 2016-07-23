@@ -307,6 +307,9 @@ vector<pair<char, int>> Floor::EnemiesTurn(bool merchanthostile){
                 if((e->isMerchant()&& merchanthostile)||(e->isHostile())){
                     int damage = e->attack(pc, playerCell);
                     enemyAttack.emplace_back(make_pair(e->getSymbol(), damage));
+                }else {
+                    e->move(walkCell, curCell);
+                    enemyAttack.emplace_back(make_pair(e->getSymbol(), -1));
                 }
             }else if(e->canMove()){
                 e->move(walkCell, curCell);
@@ -330,7 +333,7 @@ shared_ptr<Enemy> Floor::pcAttack(string dir){
                 shared_ptr<Enemy> e = dynamic_pointer_cast<Enemy>(c);
                 int damage = pc->attack(e, targetCell);
                 thedisplay->PcAttackMessage(damage, e);
-                if(e->isDead()) pc->setGold(pc->getGold() + e->getGold());
+                if(e->isDead()) pc->setGold(e->getGold());
                 return e;
             }
         }
