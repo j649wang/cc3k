@@ -26,6 +26,8 @@ class Floor{
     std::vector<std::shared_ptr<Enemy>> theEnemys;
     std::vector<std::shared_ptr<Potion>> thePotions;
     std::vector<std::shared_ptr<Gold>> theGolds;
+    Cell *findrandomCell(int avoid);
+    int findChamber(int avoid);
 public:
     Floor(std::shared_ptr<Display> display,std::shared_ptr<Player> pc);
     ~Floor();
@@ -44,8 +46,6 @@ public:
     std::shared_ptr<Enemy> pcAttack(std::string dir);
     std::vector<std::shared_ptr<Potion>> findPotion();
     
-    Cell *findrandomCell(int avoid);
-    int findChamber(int avoid);
     std::vector<std::pair<char, int>> EnemiesTurn(bool merchanthostile);
 };
 
