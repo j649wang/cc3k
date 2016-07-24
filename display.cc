@@ -74,7 +74,25 @@ void Display::bottomMessage(int level, const shared_ptr<Player> &pc) const{
 }
 
 void Display::moveMessage(string dir){
-    action = "PC moves "+ dir;
+    string s;
+    if(dir == "no"){
+        s = "North";
+    }else if(dir == "so"){
+        s = "South";
+    }else if(dir == "we"){
+        s = "West";
+    }else if(dir == "ea"){
+        s = "East";
+    }else if(dir == "ne"){
+        s = "NorthEast";
+    }else if(dir == "nw"){
+        s = "NorthWest";
+    }else if(dir == "se"){
+        s = "SouthEast";
+    }else if(dir == "sw"){
+        s = "SouthWest";
+    }
+    action = "PC moves "+ s;
 }
 
 void Display::dragonHostileMessage(){
@@ -180,3 +198,4 @@ void Display::scoreMessage(shared_ptr<Player> pc){
 void Display::enterNextLevel(){
     action = "PC entered the next level";
 }
+

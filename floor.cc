@@ -304,14 +304,13 @@ vector<pair<char, int>> Floor::EnemiesTurn(bool merchanthostile){
         
         if(!e->isDead()){
             if(playerCell){
-                if((e->isMerchant()&& merchanthostile)||(e->isHostile())){
+                if((e->isMerchant()&&merchanthostile)||(e->isHostile())){
                     int damage = e->attack(pc, playerCell);
                     enemyAttack.emplace_back(make_pair(e->getSymbol(), damage));
-                }else {
-                    e->move(walkCell, curCell);
-                    enemyAttack.emplace_back(make_pair(e->getSymbol(), -1));
+                    continue;
                 }
-            }else if(e->canMove()){
+            }
+            if(e->canMove()){
                 e->move(walkCell, curCell);
                 enemyAttack.emplace_back(make_pair(e->getSymbol(), -1));
             }
@@ -415,3 +414,4 @@ shared_ptr<Potion> Floor::pcUsePotion(string dir){
     }
     return nullptr;
 }
+

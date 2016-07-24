@@ -35,7 +35,7 @@ void Player::drinkPotion(shared_ptr<Potion> p, Cell *targetcell){
 int Player::pickGold(shared_ptr<Gold> g, Cell *curcell){
     if(g->canPickUp()){
         int amount = g->getValue();
-        setGold(amount);
+        setGold(g->getValue());
         curcell->setOverlapComponent(nullptr);
         g->setValue(0);
         return amount;

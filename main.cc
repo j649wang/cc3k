@@ -19,7 +19,7 @@ int main(int argc, char **argv){
         if(g.quitProgram()) return 0;
         g.start();
         if((g.isWin())||(g.isLost())){
-            cout << "Do you want to play again? Enter 'y'means Yes; Enter 'n' means No." << endl;
+            cout << "Do you want to play again? Enter 'y' means Yes; Enter 'n' means No." << endl;
             cin >> cmd;
             if(cmd == "n") return 0;
             while((cmd != "y")&&(cmd != "n")){
