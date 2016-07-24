@@ -26,7 +26,7 @@ class Character: public Component{
     int  getOrigATK() const;
     int  getOrigDEF() const;
 
-    bool isDead() const override;
+    bool isDead() const;
     
     virtual double getGold() const;
     virtual bool move(Cell *targetcell, Cell *curcell) = 0;

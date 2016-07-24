@@ -3,20 +3,20 @@
 #include "item.h"
 #include <string>
 
-class Dragon;
+class Character;
 
 class Gold: public item{
 	int value;
   public:
-	virtual int getValue() const;
+    virtual int getValue() const;
     
     virtual void notifyDragon(Cell *Playernear);
     
     virtual bool canPickUp() const;
     
-    virtual void setGuard(std::shared_ptr<Component> guard);
+    virtual void setGuard(std::shared_ptr<Character> guard);
     
-	Gold(int value, char symbol = 'G');
+    Gold(int value, char symbol = 'G');
     
     bool isGold() const override;
     

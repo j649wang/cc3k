@@ -13,7 +13,7 @@ void DragonHoard::notifyDragon(Cell *Playernear){
     }
 }
 
-void DragonHoard::setGuard(shared_ptr<Component> dragon){
+void DragonHoard::setGuard(shared_ptr<Character> dragon){
     guard = dragon;
 }
 

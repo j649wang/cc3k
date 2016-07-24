@@ -13,7 +13,6 @@
 class item: public Component{
 public:
     item(char symbol);
-    bool isDead()  const override;
     virtual ~item() = 0;
 };
 

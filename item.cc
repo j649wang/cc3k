@@ -5,4 +5,4 @@
 
 item::item(char symbol):Component{symbol}{}
 item::~item(){}
-bool item::isDead() const {return false;}
+

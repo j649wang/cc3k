@@ -45,9 +45,8 @@ public:
     std::shared_ptr<Potion> pcUsePotion(std::string dir);
     std::shared_ptr<Enemy> pcAttack(std::string dir);
     std::vector<std::shared_ptr<Potion>> findPotion();
-    
+   
     std::vector<std::pair<char, int>> EnemiesTurn(bool merchanthostile);
 };
 
 #endif /* Floor_hpp */
-

@@ -14,7 +14,7 @@ Gold::~Gold(){}
 
 bool Gold::isGold() const{ return true;}
 
-void Gold::setGuard(shared_ptr<Component> guard){}
+void Gold::setGuard(shared_ptr<Character> guard){}
 
 bool Gold::isDragonHoard() const {return false;}
 

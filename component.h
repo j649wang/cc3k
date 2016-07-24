@@ -16,7 +16,6 @@ class Component{
     void setCol(int j);
     void setCoords(const Cell &c);
     Component(char symbol);
-    virtual bool isDead() const = 0;
     virtual ~Component() = 0;
     virtual bool isEnemy() const;
     virtual bool isGold() const;

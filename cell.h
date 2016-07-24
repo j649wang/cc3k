@@ -32,9 +32,8 @@ public:
     void componentLeft();  //
     Cell *findPlayer() const;
     Cell *findWalkable() const;
-    std::vector<std::shared_ptr<Potion>> findPotions(); //*
     std::shared_ptr<Component> findDragon();
-    
+    std::vector<std::shared_ptr<Potion>> findPotions();
     //getters
     int getChamber() const; //*
     char getTileSymbol() const;
