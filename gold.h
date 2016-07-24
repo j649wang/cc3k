@@ -8,7 +8,7 @@ class Character;
 class Gold: public item{
 	int value;
   public:
-    virtual int getValue() const;
+    int getValue() const;
     
     virtual void notifyDragon(Cell *Playernear);
     

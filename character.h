@@ -6,11 +6,11 @@
 class Cell;
 
 class Character: public Component{
-	int HP;
+    int HP;
     int maxHP;
-	int ATK;
+    int ATK;
     int origATK;
-	int DEF;
+    int DEF;
     int origDEF;
     int gold;
   public:
@@ -23,11 +23,10 @@ class Character: public Component{
     int  getATK() const;
     int  getDEF() const;
     int  getHP() const;
+    bool isDead() const;
     int  getOrigATK() const;
     int  getOrigDEF() const;
 
-    bool isDead() const;
-    
     virtual double getGold() const;
     virtual bool move(Cell *targetcell, Cell *curcell) = 0;
     virtual int attack(std::shared_ptr<Character> defender, Cell *targetcell);

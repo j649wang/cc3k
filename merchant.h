@@ -2,11 +2,10 @@
 #define _MERCHANT_H_
 #include "enemy.h"
 
-class Merchant: public Enemy{
-    static bool MerchantHostile;
-  public:
+class Merchant: public Enemy{  
+public:
     Merchant();
-	bool isHostile() const override;
+    bool isHostile() const override;
     bool isMerchant() const override;//override;
 };
 #endif
